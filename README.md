@@ -233,7 +233,3 @@ sudo apt-get install -y crowbar
 This setup provides a comprehensive learning environment for understanding SIEM systems, Active Directory management, and security testing methodologies using real-world tools and scenarios.
 
 > Ensure to take snapshots of your VMs periodically for backup purposes during this setup process!
-
-Citations:
-[1] https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/20762842/28a0dde2-5692-4760-99d1-7afa7e3ed9e9/paste.txt
-![image](https://github.com/user-attachments/assets/c2403d65-30f5-4d9c-a5b7-f6c0cbbdc1da)
