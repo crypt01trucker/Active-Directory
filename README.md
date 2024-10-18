@@ -147,15 +147,40 @@ New-NetNat -Name "NATNetwork" -InternalIPInterfaceAddressPrefix 192.168.200.0/24
 ### Assign the NAT Virtual Switch to VMs in Hyper-V
 
 1. Go back to **Hyper-V Manager** and assign the virtual network you just created (the **NAT Virtual Switch**) to each of your VMs.
-2. Sign into each VM and configure the **IPv4** address so that it's within the same range as the virtual switch (e.g., `192.168.200.x`).
+2. Sign into each VM and configure a static **IPv4** address so that it's within the same range as the virtual switch (e.g., `192.168.200.x`).
 3. This ensures that all VMs are on the same network, allowing them to communicate with each other and access the internet through the NAT gateway.
 
+### Configure Kali Linux Static IP
 
+1. Right-click on the network interface in the top-right corner of your screen.
+2. Click on **Edit Connections**.
+3. Choose **Wired Connection 1** and click on the gear icon.
+4. Navigate to the **IPv4** tab.
+5. In the **Method** section, select **Manual**.
+6. Click on **Add** and input the IP address.
+7. Set the network mask to **24**.
+8. Input the default gateway you configured when setting up the virtual switch.
+9. In the **DNS Server** field, enter Google's DNS IP: `8.8.8.8`.
+10. Press **Save**.
 
 
 
 ### Configure Ubuntu Server Static IP
-Edit `/etc/netplan` with:
+To configure a static IP address on Ubuntu server we need to configure the yaml file that is stored in the '/etc/nelplan' directory. First let's navigate to that directory.
+```bash
+cd /etc/netplan
+```
+This is where you'll find YAML files that control your network configuration. These files usually have a `.yaml` extension, and their names may vary depending on your installation.
+To find the network configuration file you need to edit, use the `ls` command.
+
+```bash
+ls -la
+```
+
+- **ls**: Lists files and directories.
+- **-l**: Shows detailed info (permissions, owner, size).
+- **-a**: Includes hidden files (files starting with .).
+
 ```yaml
 network:
   version: 2
@@ -169,9 +194,13 @@ network:
         - to: default
           via: 192.168.200.1
 ```
+- **`eth0`**: This is the name of the network interface. Make sure to replace this with your actual interface name if it's different. You can find the interface name using the `ip addr` command.
+- **`dhcp4: no`**: Disables DHCP, so the system won't try to automatically assign an IP address.
+- **`addresses`**: This sets the static IP and subnet mask. In this example, the IP is `192.168.200.20` with a subnet of `/24` (which translates to `255.255.255.0`).
+- **`nameservers`**: This sets the DNS server. In this example, we’re using Google’s DNS (`8.8.8.8`).
+- **`routes`**: This defines the default gateway for the network (`192.168.200.1`).
 
-### Configure Kali Linux Static IP
-Use GUI to set manual IPv4 settings.
+> **Tip**: Be careful with indentation. YAML files require tabs, not spaces, for indentation.
 
 ## Installing Splunk on Ubuntu Server
 1. Download Splunk using wget:
