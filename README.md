@@ -45,7 +45,7 @@ Before we begin setting up the VMs, download the required ISO files and virtual 
 9. Click **Browse** and select the **Windows 10** ISO file you downloaded earlier.
 10. Click **Finish** to create the VM.
 
-### Windows Server 2022 VM (Active Directory)
+#### Windows Server 2022 VM (Active Directory)
 
 1. Follow the same steps as creating the **Windows 10** VM.
 2. Name the VM (e.g., "AD-Server").
@@ -56,7 +56,7 @@ Before we begin setting up the VMs, download the required ISO files and virtual 
 7. During the installation, choose the second option: **Desktop Experience** (this includes the GUI).
 8. On the first startup, set the **Administrator password**. Save it securely in your password manager to avoid losing access.
 
-### Kali Linux VM (Attacker)
+#### Kali Linux VM (Attacker)
 
 1. Name the VM (e.g., "Kali-Attacker").
 2. Choose **Generation 2** for the VM generation.
@@ -73,7 +73,7 @@ Before we begin setting up the VMs, download the required ISO files and virtual 
 sudo apt-get update && apt-get upgrade -y
 ```
 
-### Ubuntu Server VM (Splunk Lab)
+#### Ubuntu Server VM (Splunk Lab)
 
 1. **Name the VM** (e.g., "Splunk").
 2. Allocate at least **8192 MB (8 GB)** of memory.
@@ -203,7 +203,7 @@ network:
 > **Tip**: Be careful with indentation. YAML files require tabs, not spaces, for indentation.
 
 ## Installing Splunk on Ubuntu Server
-1. Download Splunk using wget:
+1. Download Splunk package using wget:
    ```bash
    wget -O splunk.deb "https://download.splunk.com/products/splunk/releases/9.3.1/linux/splunk-9.3.1-0b8d769cb912-linux-2.6-amd64.deb"
    ```
@@ -212,12 +212,118 @@ network:
    ```bash
    sudo dpkg -i splunk.deb
    ```
+3. Navigate to Splunk Directory and List All Files.
+4. ```bash
+   cd /opt/splunk
+   ls -l
+   ```
+   These commands will show you the user and group associated with the Splunk Files, confirming that Splunk only has the necessary privileges.
 
 3. Start Splunk and enable boot-start:
    ```bash
    sudo /opt/splunk/bin/splunk start
    sudo /opt/splunk/bin/splunk enable boot-start -user splunk
    ```
+
+## Setting Static IP Addresses for Windows Target VM and Windows Server
+### 1. Open Network Connections
+- Right-click on the **Windows icon** at the bottom left corner of your screen.
+- Click on **Run**.
+- Type `ncpa.cpl` and press **Enter**.
+
+### 2. Configure Network Adapter
+- Right-click on the **network adapter** and select **Properties**.
+- Click on **Internet Protocol Version 4 (TCP/IPv4)** and then click on **Properties**.
+
+### 3. Set Static IP Address for Windows Target VM
+- Select **Use the following IP address**:
+  - **IP address**: Set an IP address within the virtual switch range you created, e.g., `192.168.200.10`
+  - **Subnet mask**: `255.255.255.0` (/24)
+  - **Default gateway**: The gateway IP set when you created the virtual switch, e.g., `192.168.200.1`
+- Set DNS server addresses:
+  - **Preferred DNS server**: `192.168.200.100` (Windows Server IP, for domain joining)
+  - **Alternate DNS server**: `8.8.8.8` (Google DNS)
+- Click **OK** to save the settings.
+
+### 4. Set Static IP Address for Windows Server VM
+- Follow the same steps as above.
+- Assign the following IP settings:
+  - **IP address**: Set an IP address within the virtual switch range, e.g., `192.168.200.100`
+  - **Subnet mask**: `255.255.255.0` (/24)
+  - **Default gateway**: `192.168.200.1` (same as the target VM)
+- Set DNS server addresses:
+  - **Preferred DNS server**: `192.168.200.100` (The server's own IP)
+- Click **OK** to save the settings.
+
+### 5. Verify Configuration
+- After setting the static IPs, open a command prompt and ping a website (e.g., `ping google.com`) to check if the internet connection is working.
+- Ping from the Windows target VM to the Windows server to ensure they can communicate. Note that by default, ping may be disabled on the Windows target VM.
+
+## Installing Sysmon and Splunk Forwarder on Windows 10 and Windows Server
+### 1. Install Splunk Universal Forwarder
+1. **Download Splunk Universal Forwarder**:
+   - Go to [splunk.com](https://www.splunk.com) and sign in with the account you created earlier.
+   - Navigate to **Products > Free Trials and Downloads**.
+   - Scroll down to **Universal Forwarder** and click on **Get my free download**.
+   - Choose the **Windows 64-bit** version.
+
+2. **Run the Installer**:
+   - Once the download is complete, run the installer.
+   - Check the box to accept the license agreement and choose **On-Premises Splunk**.
+   - Enter a username (e.g., `admin`) and click on **Generate random password**.
+   - For **Deployment Server**, leave it blank as we don’t have one for this lab.
+   - For **Receiving Indexer**, enter the IP address of your Ubuntu Splunk VM with the default port `9997`.
+   - Click on **Install** to complete the setup.
+  
+### 2. Install Sysmon
+1. **Download Sysmon**:
+   - Go to the [Sysinternals website](https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon) and download Sysmon.
+
+2. **Download Sysmon Config File**:
+   - Get the Sysmon config XML file from [OLAF GitHub](https://github.com/olafhartong/sysmon-modular).
+   - Scroll down and select `sysmonconfig.xml`.
+   - Click on **Raw**, right-click, select **Save as**, and download it into your download folder.
+
+3. **Extract and Install Sysmon**:
+   - Extract the Sysmon zip file first.
+   - Run PowerShell as an administrator and change to the download directory:
+     ```powershell
+     cd path\to\download\directory
+     ```
+   - Run the following command to install Sysmon with the config file:
+     ```powershell
+     .\Sysmon64.exe -i ..\sysmonconfig.xml
+     ```
+   - Note: The `..\sysmonconfig.xml` indicates that the config file is in the parent directory, not the same folder as the extracted `Sysmon64.exe` file.
+
+### 3. Configure Splunk Forwarder
+1. **Modify Inputs.conf File**:
+   - Navigate to `C:\Program Files\SplunkUniversalForwarder\etc\system\default`.
+   - Copy the `inputs.conf` file to the local directory: `C:\Program Files\SplunkUniversalForwarder\etc\system\local`.
+
+2. **Edit Inputs.conf File**:
+   - Open Notepad as an administrator.
+   - Open the `inputs.conf` file in the local directory.
+   - Erase everything and paste the following configuration:
+     ```plaintext
+     [WinEventLog://Application]
+     index = endpoint
+     disabled = false
+     [WinEventLog://Security]
+     index = endpoint
+     disabled = false
+     [WinEventLog://System]
+     index = endpoint
+     disabled = false
+     [WinEventLog://Microsoft-Windows-Sysmon/Operational]
+     index = endpoint
+     disabled = false
+     renderXml = true
+     source = XmlWinEventLog:Microsoft-Windows-Sysmon/Operational
+     ```
+
+3. **Save the File:**
+   - Save the file and restart the Splunk Universal Forwarder service for the changes to take effect.
 
 ## Promoting Windows Server to Domain Controller
 1. In Server Manager, add AD DS role.
