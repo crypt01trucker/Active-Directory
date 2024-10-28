@@ -217,7 +217,7 @@ network:
    cd /opt/splunk
    ls -l
    ```
-   These commands will show you the user and group associated with the Splunk Files, confirming that Splunk only has the necessary privileges.
+These commands will show you the user and group associated with the Splunk files, confirming that Splunk has only the necessary privileges.
 
 3. Start Splunk and enable boot-start:
    ```bash
@@ -260,7 +260,7 @@ network:
 - Ping from the Windows target VM to the Windows server to ensure they can communicate. Note that by default, ping may be disabled on the Windows target VM.
 
 ## Installing Sysmon and Splunk Forwarder on Windows 10 and Windows Server
-### 1. Install Splunk Universal Forwarder
+### Install Splunk Universal Forwarder
 1. **Download Splunk Universal Forwarder**:
    - Go to [splunk.com](https://www.splunk.com) and sign in with the account you created earlier.
    - Navigate to **Products > Free Trials and Downloads**.
@@ -275,7 +275,7 @@ network:
    - For **Receiving Indexer**, enter the IP address of your Ubuntu Splunk VM with the default port `9997`.
    - Click on **Install** to complete the setup.
   
-### 2. Install Sysmon
+### Install Sysmon
 1. **Download Sysmon**:
    - Go to the [Sysinternals website](https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon) and download Sysmon.
 
@@ -296,7 +296,7 @@ network:
      ```
    - Note: The `..\sysmonconfig.xml` indicates that the config file is in the parent directory, not the same folder as the extracted `Sysmon64.exe` file.
 
-### 3. Configure Splunk Forwarder
+### Configure Splunk Forwarder on VM's
 1. **Modify Inputs.conf File**:
    - Navigate to `C:\Program Files\SplunkUniversalForwarder\etc\system\default`.
    - Copy the `inputs.conf` file to the local directory: `C:\Program Files\SplunkUniversalForwarder\etc\system\local`.
@@ -324,6 +324,13 @@ network:
 
 3. **Save the File:**
    - Save the file and restart the Splunk Universal Forwarder service for the changes to take effect.
+
+### Configuring Splunk to Receive Data from Forwarders
+#### 1. Sign into the Splunk Web Portal
+- Open your web browser and navigate to the IP address of your Splunk server with port 8000:
+  ```plaintext
+  http://192.168.200.20:8000
+
 
 ## Promoting Windows Server to Domain Controller
 1. In Server Manager, add AD DS role.
