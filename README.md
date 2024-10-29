@@ -594,6 +594,43 @@ index=endpoints
    **Explanation:**
    - This command launches a brute force attack against the RDP service using the list of passwords in `password.txt` to try and log in as **vblue**. Since we manually added **Val's** real password to the list, we expect the attack to succeed in a shorter amount of time compared to running the entire **rockyou.txt** file.
 
+## Analyzing Telemetry in Splunk
+
+### Access the Splunk Web Portal
+
+1. Open your web browser and navigate to the Splunk web portal using the IP address of the Splunk Vm we created earlier (e.g., `https://192.168.200.20:8000`).
+2. Log in with your credentials.
+
+### Set Up Your Search
+
+1. In the search bar at the top of the Splunk interface, enter the following search query:
+   ```
+   index="endpoint" user="vblue"
+   ```
+   - Here, we're filtering for events associated with the compromised user `vblue`.
+
+2. To focus on recent activity, select the time frame to the **last 15 minutes** on the right side of the search bar.
+
+### Filter by Event Code
+
+1. Scroll down the results a bit until you find the **Event Code** section.
+2. Click on the event code dropdown and select **4625** (Windows Event ID), which indicates **failed logon attempt**.
+
+### Analyzing Failed Logins
+
+- After applying the filter, you should see multiple entries indicating failed logon attempts. 
+- You can identify that these are likely brute-force attempts since the attacker tried **50 passwords at the same exact time**.
+
+### Check for Successful RDP Connections
+
+1. Now, change the Event Code filter to **EventCode=4624**, which represents **successful logon**.
+2. You should see at least one successful login that coincides with the brute-force attempts.
+
+### Review Details of Successful Logins
+
+1. Click on **Show All 70 Lines** to see the detailed logs associated with the successful login event.
+2. Here we can see that the successful RDP connection originated from our Kali Linux host and its IP address.
+
 ## Conclusion
 
 This setup provides a comprehensive learning environment for understanding SIEM systems, Active Directory management, and security testing methodologies using real-world tools and scenarios.
