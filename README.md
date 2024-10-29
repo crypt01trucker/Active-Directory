@@ -4,14 +4,24 @@
 
 This guide aims to create an on-premises environment consisting of an Active Directory, a domain-joined Windows 10 VM, a Splunk server for log collection, and Kali Linux VM to simulate a brute-force attack on the RDP session of the Windows 10 VM. While this guide uses **Hyper-V** for virtualization, you can also choose **VMware** or **VirtualBox** to complete this setup.
 
+> **Important Security Disclaimer**: This lab environment is for educational purposes only. The techniques demonstrated should only be used in authorized test environments. Never attempt these techniques against systems without explicit permission.
+
 ## Tools and Resources Required
 
 - **Hyper-V** (or VMware/VirtualBox)
 - **Splunk** (as the SIEM)
 - **Kali Linux** (attacker)
 - **Windows 10** (Victim machine)
-- **Windows Server** (Active Directory)
-- **Password Manager** (to securely store credentials for multiple accounts)
+- **Windows Server 2022** (Active Directory)
+- **Password Manager** (Keepass, Bitwarden or similar to securely store credentials for multiple accounts)
+
+#### Minimum VM Specifications:
+- Windows Server 2022: 4GB RAM, 50GB storage
+- Windows 10: 2GB RAM, 50GB storage
+- Kali Linux: 2GB RAM, 20GB storage
+- Ubuntu Server (Splunk): 8GB RAM, 100GB storage
+
+> **Note**: Ensure your host system has enough resources to run all VMs simultaneously.
 
 ### 1. Download the Necessary ISO Files
 
@@ -176,7 +186,7 @@ To configure a static IP address on Ubuntu server we need to configure the yaml 
 cd /etc/netplan
 ```
 This is where you'll find YAML files that control your network configuration. These files usually have a `.yaml` extension, and their names may vary depending on your installation.
-To find the network configuration file you need to edit, use the `ls` command.
+To find the network configuration file you need to list all files, use the `ls` command.
 
 ```bash
 ls -la
@@ -205,7 +215,7 @@ network:
 - **`nameservers`**: This sets the DNS server. In this example, we’re using Google’s DNS (`8.8.8.8`).
 - **`routes`**: This defines the default gateway for the network (`192.168.200.1`).
 
-> **Tip**: Be careful with indentation. YAML files require tabs, not spaces, for indentation.
+> **Tip**: Be careful with indentation. This YAML file require tabs, not spaces, for indentation.
 
 ## Installing Splunk on Ubuntu Server
 
@@ -428,9 +438,21 @@ index=endpoints
    - Create two OUs, for example: `IT` and `Sales`.
 
 4. **Create Users:**
-   - Right-click on the **IT** OU and select **New > User** to create a user named **Johnny**.
-   - Enter the required details (first name, last name, user login), and assign a password.
-   - Repeat the process in the **Sales** OU to create another user, for example, **Val**.
+   - Right-click on the **Sales** OU and select **New > User**.
+   - Create a user with the following details:
+     - First name: Val
+     - Last name: Blue
+     - User logon name: vblue
+     - Assign a password that meets complexity requirements
+     > **Note**: Store this password securely in your password manager
+
+   - Right-click on the **IT** OU and select **New > User**.
+   - Create another user with the following details:
+     - First name: Johnny
+     - Last name: Admin
+     - User logon name: jadmin
+     - Assign a strong password
+     > **Note**: Store this password securely in your password manager
 
 5. **Add Johnny to Domain Admins Group:**
    - After creating **Johnny** in the **IT** OU, right-click on the user, select **Properties**, and go to the **Member Of** tab.
@@ -584,9 +606,9 @@ index=endpoints
 2. **Run the Brute Force Attack:**
    - Now, let's use the **crowbar** tool to brute force the RDP login on the Windows 10 VM. The command will use:
      - **-b rdp**: Specifies RDP as the target protocol.
-     - **-u vblue**: Username of the target user.
+     - **-u vblue**: Username of the target user (the Sales user we created earlier).
      - **-C password.txt**: Path to the password file.
-     - **-s 192.168.200.10/32**: IP address of the target machine.
+     - **-s 192.168.200.10/32**: IP address of the target Windows 10 VM.
 
    Run the following command:
 
@@ -638,4 +660,4 @@ index=endpoints
 
 This setup provides a comprehensive learning environment for understanding SIEM systems, Active Directory management, and security testing methodologies using real-world tools and scenarios.
 
-> Ensure to take snapshots of your VMs periodically for backup purposes during this setup process!
+> **Security Notice**: The techniques demonstrated in this lab should never be used against production systems or without explicit authorization. This lab is designed for educational purposes only.
