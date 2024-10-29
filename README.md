@@ -93,10 +93,13 @@ sudo apt-get update && apt-get upgrade -y
 sudo apt-get update && apt-get upgrade -y
 ```
 10. If you get a permission error, switch to root user:
+
 ```bash
 sudo su
 ```
-    After updates, exit the root user:
+
+After updates, exit the root user:
+
 ```bash
 exit
 ```
