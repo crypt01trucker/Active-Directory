@@ -482,29 +482,117 @@ index=endpoints
 
 ## Brute Force Attack Simulation with Kali Linux
 
-### Enable RDP on Windows 10 VM
-1. Go to Settings > Remote Desktop and enable it.
+### Enable Remote Desktop on Windows 10 VM
+
+1. **Go to Settings:**
+   - On your Windows 10 VM, go to **Settings** > **System** > **Remote Desktop**.
+
+2. **Enable Remote Desktop:**
+   - Toggle the switch to **Enable Remote Desktop** to allow remote connections to the Windows 10 VM.
 
 ### Install Crowbar on Kali Linux
-```bash
-sudo apt-get install -y crowbar
-```
 
-### Prepare Password List for Brute Force Attack
-1. Navigate to the wordlist directory:
+1. **Install Crowbar:**
+   - Open a terminal in Kali Linux and install the crowbar tool using the following command:
+
    ```bash
-   cd /usr/share/wordlists/
-   ```
-   
-2. Copy rockyou.txt to your project directory:
-   ```bash
-   cp rockyou.txt ~/Desktop/ad-project/
+   sudo apt-get install -y crowbar
    ```
 
-3. Use only the first 50 passwords:
+2. **Confirm Installation:**
+   - After installation, you can confirm it's ready to use by typing:
+
+   ```bash
+   crowbar -h
+   ```
+
+   This will display the help menu, which shows various options and usage instructions.
+
+### Prepare Wordlist for the Attack
+
+1. **Navigate to Wordlists Directory:**
+   - Kali Linux includes a popular wordlist called **rockyou.txt**. To access it, navigate to the wordlist directory:
+
+   ```bash
+   cd /usr/share/wordlists
+   ```
+
+2. **List Files in Directory:**
+   - Run the `ls` command to list the contents of the wordlists directory. You should see `rockyou.txt`.
+
+   ```bash
+   ls
+   ```
+
+3. **Copy rockyou.txt to Project Directory:**
+   - Copy the **rockyou.txt** wordlist to a new directory you created for this project on your Kali Linux desktop:
+
+   ```bash
+   cp rockyou.txt ~/Desktop/ad-project
+   ```
+
+   **Explanation:**
+   - The `~` symbol represents your home directory, which makes it easier to reference commonly used paths, such as your desktop or other personal folders, without needing to specify the full directory path.
+
+4. **Reduce the Size of Wordlist:**
+   - The **rockyou.txt** file is large (~135MB). Since we don’t need the full list for this lab, we’ll extract the first 50 passwords using the `head` command:
+
    ```bash
    head -n 50 rockyou.txt > password.txt
    ```
+
+   **Explanation:**
+   - This command copies the first 50 lines (which contain 50 passwords) from `rockyou.txt` into a new text file called `password.txt`. By doing this, we reduce the size of the wordlist to a smaller size for this simulation, while still having a small list of passwords to attempt the RDP brute force attack.
+
+5. **Verify the New Password File:**
+   - Use the `cat` command to view the contents of the newly created `password.txt`:
+
+   ```bash
+   cat password.txt
+   ```
+
+### Add the User's Real Password to the List
+
+1. **Edit the Password File:**
+   - Now, we’ll simulate a scenario where a user has set a weak password. Open the `password.txt` file in a text editor and add the user’s actual password to the bottom of the list:
+
+   ```bash
+   nano password.txt
+   ```
+
+2. **Scroll to the Bottom:**
+   - In the test editor, scroll to the bottom and add **Val's** real password to mimic a scenario where weak, guessable passwords can be found in a wordlists.
+
+   **Explanation:**
+   - We add the real password to simulate a situation where a user sets a common or weak password, which could easily be part of a large wordlist like **rockyou.txt**. In real-world attacks, attackers run much larger wordlists (thousands or even millions of entries) in an attempt to guess user passwords.
+
+3. **Save and Exit:**
+   - Press `CTRL + X`, then `Y`, and hit `Enter` to save and exit the nano editor.
+
+### Brute Force the RDP with Crowbar
+
+1. **Check Crowbar Help Menu:**
+   - First, review the options and syntax for crowbar by typing:
+
+   ```bash
+   crowbar -h
+   ```
+
+2. **Run the Brute Force Attack:**
+   - Now, let's use the **crowbar** tool to brute force the RDP login on the Windows 10 VM. The command will use:
+     - **-b rdp**: Specifies RDP as the target protocol.
+     - **-u vblue**: Username of the target user.
+     - **-C password.txt**: Path to the password file.
+     - **-s 192.168.200.10/32**: IP address of the target machine.
+
+   Run the following command:
+
+   ```bash
+   crowbar -b rdp -u vblue -C password.txt -s 192.168.200.10/32
+   ```
+
+   **Explanation:**
+   - This command launches a brute force attack against the RDP service using the list of passwords in `password.txt` to try and log in as **vblue**. Since we manually added **Val's** real password to the list, we expect the attack to succeed in a shorter amount of time compared to running the entire **rockyou.txt** file.
 
 ## Conclusion
 
