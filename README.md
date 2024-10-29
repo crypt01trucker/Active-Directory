@@ -372,16 +372,113 @@ index=endpoints
 4. Press **Enter** to search for incoming data. If everything is working correctly, you should see logs from your endpoints.
 
 ## Promoting Windows Server to Domain Controller
-1. In Server Manager, add AD DS role.
-   
-2. Create a new forest with your desired domain name (e.g., soclab.local).
 
-3. After installation, create Organizational Units (OUs) and users in Active Directory.
+### Install Active Directory Domain Services (ADDS)
+
+1. **Open Server Manager:**
+   - Launch the **Server Manager** on your Windows Server.
+
+2. **Add Roles and Features:**
+   - Click on **Manage** in the top-right corner and select **Add Roles and Features**.
+   - In the **Add Roles and Features Wizard**, select **Role-based or feature-based installation** and click **Next**.
+
+3. **Select Your Server:**
+   - Choose your server from the server pool and click **Next**.
+
+4. **Select ADDS Role:**
+   - In the **Select Server Roles** window, check the box for **Active Directory Domain Services (ADDS)**.
+   - A popup will appear asking you to add features that are required for ADDS. Click **Add Features**, then click **Next**.
+
+5. **Leave Defaults and Install:**
+   - For the remaining options, leave the defaults and click **Next** until you reach the **Install** button.
+   - Click **Install** to begin the installation process.
+
+### Promote the Server to a Domain Controller
+
+1. **Flag Icon Notification:**
+   - After the ADDS role is installed, a flag icon will appear beside **Manage** in the Server Manager.
+   - Click on the flag and then click on **Promote this server to a domain controller**.
+
+2. **Add a New Forest:**
+   - In the **Deployment Configuration** window, select **Add a new forest**.
+   - Provide a root domain name, for example: `soclab.local`.
+
+3. **Set Domain Controller Options:**
+   - Set a password for the Directory Services Restore Mode (DSRM).
+   - Leave the default options for the rest and click **Next**.
+
+4. **Review and Install:**
+   - Continue clicking **Next** through the remaining default settings until you reach the **Install** button.
+   - After installation, the server will automatically restart.
+
+### Step 3: Create Organizational Units (OUs) and Users
+
+1. **Sign in with Domain Account:**
+   - After the server restarts, sign in using your domain credentials. You will see the domain name (e.g., `soclab.local`) before the username.
+
+2. **Open Active Directory Users and Computers (ADUC):**
+   - In **Server Manager**, click on **Tools** in the top-right menu.
+   - From the dropdown, select **Active Directory Users and Computers (ADUC)**.
+
+3. **Create Organizational Units (OUs):**
+   - In ADUC, right-click on your domain (e.g., `soclab.local`) and select **New > Organizational Unit**.
+   - Create two OUs, for example: `IT` and `Sales`.
+
+4. **Create Users:**
+   - Right-click on the **IT** OU and select **New > User** to create a user named **Johnny**.
+   - Enter the required details (first name, last name, user login), and assign a password.
+   - Repeat the process in the **Sales** OU to create another user, for example, **Val**.
+
+5. **Add Johnny to Domain Admins Group:**
+   - After creating **Johnny** in the **IT** OU, right-click on the user, select **Properties**, and go to the **Member Of** tab.
+   - Click on **Add**, type `Domain Admins`, and add **Johnny** to the **Domain Admins** group.
+   - This will allow Johnny account to be used to join computers to the domain.
+
 
 ## Joining Windows 10 VM to Domain
-1. Right-click on "This PC" > Properties > Change settings > Change... and enter your domain name.
 
-2. Use domain admin credentials to join.
+### Open System Settings
+
+1. **Sign into the Windows 10 VM:**
+   - Sign into the Windows 10 VM
+
+2. **Access System Settings:**
+   - Right-click on the **Windows icon** (Start menu) at the bottom-left corner of the screen.
+   - In the pop-up menu, click on **System**.
+
+3. **Advanced System Settings:**
+   - In the **System** window, click on **Advanced system settings** on the right-hand side.
+
+4. **Computer Name Tab:**
+   - In the **Advanced System Properties** window, go to the **Computer Name** tab.
+   - Click on **Change** to modify the domain settings.
+
+5. **Select Domain:**
+   - Enter the domain name you created earlier (e.g., `soclab.local`) and click **OK**.
+
+2. **Enter Domain Credentials:**
+   - A pop-up window will appear, asking for credentials to join the domain.
+   - Enter the credentials of an account that has permission to join the domain, such as **Johnny's** account, which we previously added to the **Domain Admins** group.
+     - Username: `Johnny`
+     - Password: `Johnny's password`
+
+3. **Welcome Message:**
+   - If the credentials are correct, you will see a message saying **"Welcome to the soclab.local domain"**.
+
+4. **Restart the Computer:**
+   - Click **OK** on the confirmation dialog and restart the computer to apply the changes.
+
+### Sign in with Domain User
+
+1. **Sign in after Restart:**
+   - After the computer restarts, you will see the login screen.
+   - Click on **Other user** to sign in with a domain account. You will notice the domain name listed under **"Sign in to:"**, which should show `SOCLAB` (or whatever domain name you created).
+   - Enter the credentials for the **Val** user we created earlier:
+     - Username: `Val`
+     - Password: `Val's password`
+
+2. **Successful Domain Login:**
+   - Once logged in, you will be authenticated as a domain user, and you are now part of the domain.
 
 ## Brute Force Attack Simulation with Kali Linux
 
