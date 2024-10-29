@@ -484,7 +484,7 @@ index=endpoints
 2. **Enter Domain Credentials:**
    - A pop-up window will appear, asking for credentials to join the domain.
    - Enter the credentials of an account that has permission to join the domain, such as **Johnny's** account, which we previously added to the **Domain Admins** group.
-     - Username: `Johnny`
+     - Username: `jadmin`
      - Password: `Johnny's password`
 
 3. **Welcome Message:**
@@ -499,7 +499,7 @@ index=endpoints
    - After the computer restarts, you will see the login screen.
    - Click on **Other user** to sign in with a domain account. You will notice the domain name listed under **"Sign in to:"**, which should show `SOCLAB` (or whatever domain name you created).
    - Enter the credentials for the **Val** user we created earlier:
-     - Username: `Val`
+     - Username: `vblue`
      - Password: `Val's password`
 
 2. **Successful Domain Login:**
