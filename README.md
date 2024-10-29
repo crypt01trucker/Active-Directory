@@ -1,9 +1,11 @@
 # Setting Up an On-Premises Active Directory Home Lab with Splunk
 
 ## Objective
+
 This guide aims to create a on-premises environment consisting of an Active Directory, a domain-joined Windows 10 VM, a Splunk server for log collection, and Kali Linux VM to simulate a brute-force attack on the RDP session of the Windows 10 VM. While this guide uses **Hyper-V** for virtualization, you can also choose **VMware** or **VirtualBox** to complete this setup.
 
 ## Tools and Resources Required
+
 - **Hyper-V** (or VMware/VirtualBox)
 - **Splunk** (as the SIEM)
 - **Kali Linux** (attacker)
@@ -164,8 +166,8 @@ New-NetNat -Name "NATNetwork" -InternalIPInterfaceAddressPrefix 192.168.200.0/24
 10. Press **Save**.
 
 
-
 ### Configure Ubuntu Server Static IP
+
 To configure a static IP address on Ubuntu server we need to configure the yaml file that is stored in the '/etc/nelplan' directory. First let's navigate to that directory.
 ```bash
 cd /etc/netplan
@@ -203,6 +205,7 @@ network:
 > **Tip**: Be careful with indentation. YAML files require tabs, not spaces, for indentation.
 
 ## Installing Splunk on Ubuntu Server
+
 1. Download Splunk package using wget:
    ```bash
    wget -O splunk.deb "https://download.splunk.com/products/splunk/releases/9.3.1/linux/splunk-9.3.1-0b8d769cb912-linux-2.6-amd64.deb"
@@ -226,6 +229,7 @@ These commands will show you the user and group associated with the Splunk files
    ```
 
 ## Setting Static IP Addresses for Windows Target VM and Windows Server
+
 ### 1. Open Network Connections
 - Right-click on the **Windows icon** at the bottom left corner of your screen.
 - Click on **Run**.
@@ -260,6 +264,7 @@ These commands will show you the user and group associated with the Splunk files
 - Ping from the Windows target VM to the Windows server to ensure they can communicate. Note that by default, ping may be disabled on the Windows target VM.
 
 ## Installing Sysmon and Splunk Forwarder on Windows 10 and Windows Server
+
 ### Install Splunk Universal Forwarder
 1. **Download Splunk Universal Forwarder**:
    - Go to [splunk.com](https://www.splunk.com) and sign in with the account you created earlier.
@@ -326,11 +331,45 @@ These commands will show you the user and group associated with the Splunk files
    - Save the file and restart the Splunk Universal Forwarder service for the changes to take effect.
 
 ### Configuring Splunk to Receive Data from Forwarders
+
 #### 1. Sign into the Splunk Web Portal
 - Open your web browser and navigate to the IP address of your Splunk server with port 8000:
   ```plaintext
   http://192.168.200.20:8000
+  ```
 
+#### 2: Create the "endpoint" Index
+
+When we set up the Splunk forwarder on our two VM's (Windows 10 victim and Windows server) , we configured them to use the `index = endpoints`. By default, this index does not exist in Splunk, so we need to create it.
+
+1. Click on **Settings** in the top-right corner of the Splunk web portal.
+2. Under the **Data** section, click on **Indexes**.
+3. On the **Indexes** page, click on the **New Index** button.
+4. In the **Index Name** field, type `endpoint`.
+5. Click on **Save** to create the new index.
+
+#### 3: Enable Splunk Server to Receive Data
+
+Since we chose port **9997** when we setup Splunk forwarder on our 2 VMs, you need to configure the Splunk server to listen on the default port **9997**.
+
+1. Go to **Settings** in the top-right corner.
+2. Under the **Data** section, click on **Forwarding and Receiving**.
+3. Click on **Configure Receiving**.
+4. On the receiving configuration page, click on **New Receiving Port** in the top-right corner.
+5. Enter **9997** as the port number and click on **Save**.
+
+#### 4: Verify Data is Coming In
+
+Once everything is set up correctly, you should start seeing data from your endpoints being sent to the Splunk server.
+
+1. Click on **Apps** in the top-left corner and select **Search & Reporting**.
+2. In the search bar at the top, type:
+
+```plaintext
+index=endpoints
+ ```
+3. Ensure that the time frame is correctly set in the time picker on the right-hand side of the screen (default is 24 hours).
+4. Press **Enter** to search for incoming data. If everything is working correctly, you should see logs from your endpoints.
 
 ## Promoting Windows Server to Domain Controller
 1. In Server Manager, add AD DS role.
