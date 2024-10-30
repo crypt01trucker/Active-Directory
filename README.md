@@ -58,10 +58,24 @@ Before we begin setting up the VMs, download the required ISO files and virtual 
 4. Choose **Generation 2** for the VM generation.
 5. Assign at least 2048 MB (2 GB) of memory.
 6. Leave the network connection as **Not Connected** for the initial setup.
-7. Choose **Create a virtual hard disk** and assign at least 50 GB of storage.
+7. Choose **Create a virtual hard disk** and assign at least 40 GB of storage.
 8. Select **Install an operating system from a bootable image file (.iso)**.
 9. Click **Browse** and select the **Windows 10** ISO file you downloaded earlier.
 10. Click **Finish** to create the VM.
+
+![Win10VM1](screenshots/Hypervinstallwin10vm.png).
+
+![Win10VM2](screenshots/Hypervinstallwin10vm2.png).
+
+![Win10VM3](screenshots/Hypervinstallwin10vm3.png).
+
+![Win10VM4](screenshots/Hypervinstallwin10vm4.png).
+
+![Win10VM5](screenshots/Hypervinstallwin10vm5.png).
+
+![Win10VM6](screenshots/Hypervinstallwin10vm6.png).
+
+![Win10VM7](screenshots/Hypervinstallwin10vm7.png).
 
 #### Windows Server 2022 VM (Active Directory)
 
