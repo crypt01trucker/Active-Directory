@@ -326,6 +326,8 @@ These commands will show you the user and group associated with the Splunk files
   - **Preferred DNS server**: `192.168.200.100` (The server's own IP)
 - Click **OK** to save the settings.
 
+![WinservIP](screenshots/WindowsServerStaticIP.png).
+
 ### 5. Verify Configuration
 - After setting the static IPs, open a command prompt and ping a website (e.g., `ping google.com`) to check if the internet connection is working.
 - Ping from the Windows target VM to the Windows server to ensure they can communicate. Note that by default, ping may be disabled on the Windows target VM.
@@ -341,6 +343,8 @@ These commands will show you the user and group associated with the Splunk files
    - Scroll down to **Universal Forwarder** and click on **Get my free download**.
    - Choose the **Windows 64-bit** version.
 
+![Splunkforwarder](screenshots/Splunk-Forwarder.png).
+
 2. **Run the Installer**:
    - Once the download is complete, run the installer.
    - Check the box to accept the license agreement and choose **On-Premises Splunk**.
@@ -349,6 +353,16 @@ These commands will show you the user and group associated with the Splunk files
    - For **Receiving Indexer**, enter the IP address of your Ubuntu Splunk VM with the default port `9997`.
    - Click on **Install** to complete the setup.
   
+![Splunkfwd1](screenshots/Splunk-Forwarder-install1.png).
+
+![Splunkfwd2](screenshots/Splunk-Forwarder-install2.png).
+
+![Splunkfwd3](screenshots/Splunk-Forwarder-install3.png).
+
+![Splunkfwd5](screenshots/Splunk-Forwarder-install4.png).
+
+![Splunkfwd5](screenshots/Splunk-Forwarder-install5.png).
+
 ### Install Sysmon
 1. **Download Sysmon**:
    - Go to the [Sysinternals website](https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon) and download Sysmon.
@@ -357,6 +371,10 @@ These commands will show you the user and group associated with the Splunk files
    - Get the Sysmon config XML file from [OLAF GitHub](https://github.com/olafhartong/sysmon-modular).
    - Scroll down and select `sysmonconfig.xml`.
    - Click on **Raw**, right-click, select **Save as**, and download it into your download folder.
+
+![SysmonConf1](screenshots/Sysmon-Config1.png).
+
+![SysmonConf2](screenshots/Sysmon-Config2.png).
 
 3. **Extract and Install Sysmon**:
    - Extract the Sysmon zip file first.
@@ -370,10 +388,19 @@ These commands will show you the user and group associated with the Splunk files
      ```
    - Note: The `..\sysmonconfig.xml` indicates that the config file is in the parent directory, not the same folder as the extracted `Sysmon64.exe` file.
 
+![Sysmon1](screenshots/Sysmon-Install1.png).
+
+![Sysmon2](screenshots/Sysmon-Install2.png).
+
+
 ### Configure Splunk Forwarder on VM's
 1. **Modify Inputs.conf File**:
    - Navigate to `C:\Program Files\SplunkUniversalForwarder\etc\system\default`.
    - Copy the `inputs.conf` file to the local directory: `C:\Program Files\SplunkUniversalForwarder\etc\system\local`.
+
+![SplunkConfig1](screenshots/Splunk-Config1.png).
+
+![SplunkConfig2](screenshots/Splunk-Config2.png).
 
 2. **Edit Inputs.conf File**:
    - Open Notepad as an administrator.
@@ -396,16 +423,29 @@ These commands will show you the user and group associated with the Splunk files
      source = XmlWinEventLog:Microsoft-Windows-Sysmon/Operational
      ```
 
+![SplunkConfig3](screenshots/Splunk-Config3.png).
+
 3. **Save the File:**
-   - Save the file and restart the Splunk Universal Forwarder service for the changes to take effect.
+   - Save the file.
+   - Change the log on for the Splunk Forwarder service to the **Local System account**:
+     - Open **Services** (`services.msc`).
+     - Find **SplunkForwarder** in the list, right-click, and select **Properties**.
+     - Go to the **Log On** tab and choose **Local System account**.
+     - Click **Apply** and **OK**.
+   - Restart the Splunk Universal Forwarder service for the changes to take effect.
+
+![Splunkserv1](screenshots/Splunk-Services1.png).
+
+![Splunkserv2](screenshots/Splunk-Services2.png).
 
 ### Configuring Splunk to Receive Data from Forwarders
 
 #### 1. Sign into the Splunk Web Portal
 - Open your web browser and navigate to the IP address of your Splunk server with port 8000:
   ```plaintext
-  http://192.168.200.20:8000
+  https://192.168.200.20:8000
   ```
+![Splunweb1](screenshots/Splunk-Web1.png).
 
 #### 2: Create the "endpoint" Index
 
@@ -417,6 +457,12 @@ When we set up the Splunk forwarder on our two VM's (Windows 10 victim and Windo
 4. In the **Index Name** field, type `endpoint`.
 5. Click on **Save** to create the new index.
 
+![Splunweb2](screenshots/Splunk-Web2.png).
+
+![Splunweb4](screenshots/Splunk-Web4.png).
+
+![Splunweb5](screenshots/Splunk-Web5.png).
+
 #### 3: Enable Splunk Server to Receive Data
 
 Since we chose port **9997** when we setup Splunk forwarder on our 2 VMs, you need to configure the Splunk server to listen on the default port **9997**.
@@ -426,6 +472,10 @@ Since we chose port **9997** when we setup Splunk forwarder on our 2 VMs, you ne
 3. Click on **Configure Receiving**.
 4. On the receiving configuration page, click on **New Receiving Port** in the top-right corner.
 5. Enter **9997** as the port number and click on **Save**.
+
+![Splunweb6](screenshots/Splunk-Web6.png).
+
+![Splunweb7](screenshots/Splunk-Web7.png).
 
 #### 4: Verify Data is Coming In
 
@@ -440,6 +490,8 @@ index=endpoints
 3. Ensure that the time frame is correctly set in the time picker on the right-hand side of the screen (default is 24 hours).
 4. Press **Enter** to search for incoming data. If everything is working correctly, you should see logs from your endpoints.
 
+![Splunweb8](screenshots/Splunk-Web8.png).
+
 ## Promoting Windows Server to Domain Controller
 
 ### Install Active Directory Domain Services (ADDS)
@@ -451,6 +503,8 @@ index=endpoints
    - Click on **Manage** in the top-right corner and select **Add Roles and Features**.
    - In the **Add Roles and Features Wizard**, select **Role-based or feature-based installation** and click **Next**.
 
+![Winserv1](screenshots/WindowsServer1.png).
+
 3. **Select Your Server:**
    - Choose your server from the server pool and click **Next**.
 
@@ -458,15 +512,21 @@ index=endpoints
    - In the **Select Server Roles** window, check the box for **Active Directory Domain Services (ADDS)**.
    - A popup will appear asking you to add features that are required for ADDS. Click **Add Features**, then click **Next**.
 
+![Winserv2](screenshots/WindowsServer2.png).
+
 5. **Leave Defaults and Install:**
    - For the remaining options, leave the defaults and click **Next** until you reach the **Install** button.
    - Click **Install** to begin the installation process.
+
+![Winserv3](screenshots/WindowsServer3.png).
 
 ### Promote the Server to a Domain Controller
 
 1. **Flag Icon Notification:**
    - After the ADDS role is installed, a flag icon will appear beside **Manage** in the Server Manager.
    - Click on the flag and then click on **Promote this server to a domain controller**.
+
+![Winserv4](screenshots/WindowsServer4.png).
 
 2. **Add a New Forest:**
    - In the **Deployment Configuration** window, select **Add a new forest**.
@@ -489,9 +549,13 @@ index=endpoints
    - In **Server Manager**, click on **Tools** in the top-right menu.
    - From the dropdown, select **Active Directory Users and Computers (ADUC)**.
 
+![Winserv6](screenshots/WindowsServer6.png).
+
 3. **Create Organizational Units (OUs):**
    - In ADUC, right-click on your domain (e.g., `soclab.local`) and select **New > Organizational Unit**.
    - Create two OUs, for example: `IT` and `Sales`.
+
+![Winserv7](screenshots/WindowsServer7.png).
 
 4. **Create Users:**
    - Right-click on the **Sales** OU and select **New > User**.
@@ -510,11 +574,14 @@ index=endpoints
      - Assign a strong password
      > **Note**: Store this password securely in your password manager
 
+![Winserv8](screenshots/WindowsServer8.png).
+
 5. **Add Johnny to Domain Admins Group:**
    - After creating **Johnny** in the **IT** OU, right-click on the user, select **Properties**, and go to the **Member Of** tab.
    - Click on **Add**, type `Domain Admins`, and add **Johnny** to the **Domain Admins** group.
    - This will allow Johnny account to be used to join computers to the domain.
 
+![Winserv9](screenshots/WindowsServer9.png).
 
 ## Joining Windows 10 VM to Domain
 
@@ -527,27 +594,41 @@ index=endpoints
    - Right-click on the **Windows icon** (Start menu) at the bottom-left corner of the screen.
    - In the pop-up menu, click on **System**.
 
+![Windom1](screenshots/Windowsdomain1.png).
+
 3. **Advanced System Settings:**
    - In the **System** window, click on **Advanced system settings** on the right-hand side.
+
+![Windom2](screenshots/Windowsdomain2.png).
 
 4. **Computer Name Tab:**
    - In the **Advanced System Properties** window, go to the **Computer Name** tab.
    - Click on **Change** to modify the domain settings.
 
+![Windome](screenshots/Windowsdomain3.png).
+
 5. **Select Domain:**
    - Enter the domain name you created earlier (e.g., `soclab.local`) and click **OK**.
 
-2. **Enter Domain Credentials:**
+![Windom4](screenshots/Windowsdomain4.png).
+
+6. **Enter Domain Credentials:**
    - A pop-up window will appear, asking for credentials to join the domain.
    - Enter the credentials of an account that has permission to join the domain, such as **Johnny's** account, which we previously added to the **Domain Admins** group.
      - Username: `jadmin`
      - Password: `Johnny's password`
 
-3. **Welcome Message:**
+![Windom5](screenshots/Windowsdomain5.png).
+
+7. **Welcome Message:**
    - If the credentials are correct, you will see a message saying **"Welcome to the soclab.local domain"**.
 
-4. **Restart the Computer:**
+![Windom6](screenshots/Windowsdomainwelcome.png).
+
+8. **Restart the Computer:**
    - Click **OK** on the confirmation dialog and restart the computer to apply the changes.
+
+![Windom7](screenshots/Windowsdomainrestart.png).
 
 ### Sign in with Domain User
 
@@ -558,8 +639,12 @@ index=endpoints
      - Username: `vblue`
      - Password: `Val's password`
 
+![Windomlogon](screenshots/Windowsdomainlogon.png).
+
 2. **Successful Domain Login:**
    - Once logged in, you will be authenticated as a domain user, and you are now part of the domain.
+
+![Windomjoin](screenshots/Windowsdomainjoinedend.png).
 
 ## Brute Force Attack Simulation with Kali Linux
 
@@ -570,6 +655,14 @@ index=endpoints
 
 2. **Enable Remote Desktop:**
    - Toggle the switch to **Enable Remote Desktop** to allow remote connections to the Windows 10 VM.
+   - Click on **Select users that can remotely access this PC**.
+   - Click on **Add** and enter the username `vblue`.
+   - Click on **Check Names** to ensure the name is recognized.
+   - Click **OK** to add the user.
+
+![Winrdp](screenshots/EnableRDPwin10.png).
+
+![vblueuser](screenshots/adduservblueRDP.png).
 
 ### Install Crowbar on Kali Linux
 
@@ -615,6 +708,8 @@ index=endpoints
    **Explanation:**
    - The `~` symbol represents your home directory, which makes it easier to reference commonly used paths, such as your desktop or other personal folders, without needing to specify the full directory path.
 
+![Kalirock](screenshots/Kalirocku.png).
+
 4. **Reduce the Size of Wordlist:**
    - The **rockyou.txt** file is large (~135MB). Since we don’t need the full list for this lab, we’ll extract the first 50 passwords using the `head` command:
 
@@ -632,6 +727,8 @@ index=endpoints
    cat password.txt
    ```
 
+![Kalipass](screenshots/Kalicatpass.png).
+
 ### Add the User's Real Password to the List
 
 1. **Edit the Password File:**
@@ -642,13 +739,15 @@ index=endpoints
    ```
 
 2. **Scroll to the Bottom:**
-   - In the test editor, scroll to the bottom and add **Val's** real password to mimic a scenario where weak, guessable passwords can be found in a wordlists.
+   - In the test editor, scroll to the bottom and add **Val's** real password at the end to mimic a scenario where weak, guessable passwords can be found in a wordlists.
 
    **Explanation:**
-   - We add the real password to simulate a situation where a user sets a common or weak password, which could easily be part of a large wordlist like **rockyou.txt**. In real-world attacks, attackers run much larger wordlists (thousands or even millions of entries) in an attempt to guess user passwords.
+   - We add the real password 'V25fRYHyiksDeW' to simulate a situation where a user sets a common or weak password, which could easily be part of a large wordlist like **rockyou.txt**. In real-world attacks, attackers run much larger wordlists (thousands or even millions of entries) in an attempt to guess user passwords.
 
 3. **Save and Exit:**
    - Press `CTRL + X`, then `Y`, and hit `Enter` to save and exit the nano editor.
+
+![Kalipassadd](screenshots/Kalicatpassadd.png).
 
 ### Brute Force the RDP with Crowbar
 
@@ -675,6 +774,8 @@ index=endpoints
    **Explanation:**
    - This command launches a brute force attack against the RDP service using the list of passwords in `password.txt` to try and log in as **vblue**. Since we manually added **Val's** real password to the list, we expect the attack to succeed in a shorter amount of time compared to running the entire **rockyou.txt** file.
 
+![Kalicrowbar](screenshots/Kalicrowbar.png)
+
 ## Analyzing Telemetry in Splunk
 
 ### Access the Splunk Web Portal
@@ -692,6 +793,8 @@ index=endpoints
 
 2. To focus on recent activity, select the time frame to the **last 15 minutes** on the right side of the search bar.
 
+![Splunktele1](screenshots/Splunk-Telemetry1.png).
+
 ### Filter by Event Code
 
 1. Scroll down the results a bit until you find the **Event Code** section.
@@ -701,6 +804,10 @@ index=endpoints
 
 - After applying the filter, you should see multiple entries indicating failed logon attempts. 
 - You can identify that these are likely brute-force attempts since the attacker tried **50 passwords at the same exact time**.
+
+![Splunktele2](screenshots/Splunk-Telemetry2.png).
+
+![Splunktele3](screenshots/Splunk-Telemetry3.png).
 
 ### Check for Successful RDP Connections
 
