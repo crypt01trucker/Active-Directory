@@ -189,6 +189,8 @@ Run the following command to set up the NAT network:
 New-NetNat -Name "NATNetwork" -InternalIPInterfaceAddressPrefix 192.168.200.0/24
 ```
 
+![Virtual-Switch](screenshots/Virtual-Switch.png).
+
 ### Assign the NAT Virtual Switch to VMs in Hyper-V
 
 1. Go back to **Hyper-V Manager** and assign the virtual network you just created (the **NAT Virtual Switch**) to each of your VMs.
@@ -208,6 +210,7 @@ New-NetNat -Name "NATNetwork" -InternalIPInterfaceAddressPrefix 192.168.200.0/24
 9. In the **DNS Server** field, enter Google's DNS IP: `8.8.8.8`.
 10. Press **Save**.
 
+![KaliIP](screenshots/kalistaticIP.png).
 
 ### Configure Ubuntu Server Static IP
 
@@ -247,6 +250,10 @@ network:
 
 > **Tip**: Be careful with indentation. This YAML file require tabs, not spaces, for indentation.
 
+![SplunkOG](screenshots/Splunk-OG.png).
+
+![SplunkStatic](screenshots/Splunk-Static-IP.png).
+
 ## Installing Splunk on Ubuntu Server
 
 1. Download Splunk package using wget:
@@ -254,10 +261,15 @@ network:
    wget -O splunk.deb "https://download.splunk.com/products/splunk/releases/9.3.1/linux/splunk-9.3.1-0b8d769cb912-linux-2.6-amd64.deb"
    ```
    
+![splunkwget](screenshots/Splunk-wget.png).
+
 2. Install Splunk:
    ```bash
-   sudo dpkg -i splunk.deb
+   sudo dpkg - I splunk-9.3.1-0b8d769cb912-linux-2.6-amd64.deb
    ```
+
+![splunkpackage](screenshots/Splunk-Install.png).
+
 3. Navigate to Splunk Directory and List All Files.
 4. ```bash
    cd /opt/splunk
@@ -265,11 +277,17 @@ network:
    ```
 These commands will show you the user and group associated with the Splunk files, confirming that Splunk has only the necessary privileges.
 
+![splunkls](screenshots/Splunk-ls.png).
+
 3. Start Splunk and enable boot-start:
    ```bash
    sudo /opt/splunk/bin/splunk start
    sudo /opt/splunk/bin/splunk enable boot-start -user splunk
    ```
+
+![splunkstart](screenshots/Splunk-Start.png).
+
+![splunkonstart](screenshots/Splunk-OnStart.png).
 
 ## Setting Static IP Addresses for Windows Target VM and Windows Server
 
@@ -278,9 +296,13 @@ These commands will show you the user and group associated with the Splunk files
 - Click on **Run**.
 - Type `ncpa.cpl` and press **Enter**.
 
+![WinIP1](screenshots/Windows-IP1.png).
+
 ### 2. Configure Network Adapter
 - Right-click on the **network adapter** and select **Properties**.
 - Click on **Internet Protocol Version 4 (TCP/IPv4)** and then click on **Properties**.
+
+![WinIP3](screenshots/Windows-IP3.png).
 
 ### 3. Set Static IP Address for Windows Target VM
 - Select **Use the following IP address**:
@@ -291,6 +313,8 @@ These commands will show you the user and group associated with the Splunk files
   - **Preferred DNS server**: `192.168.200.100` (Windows Server IP, for domain joining)
   - **Alternate DNS server**: `8.8.8.8` (Google DNS)
 - Click **OK** to save the settings.
+
+![WinIP4](screenshots/Windows-IP4.png).
 
 ### 4. Set Static IP Address for Windows Server VM
 - Follow the same steps as above.
@@ -305,6 +329,8 @@ These commands will show you the user and group associated with the Splunk files
 ### 5. Verify Configuration
 - After setting the static IPs, open a command prompt and ping a website (e.g., `ping google.com`) to check if the internet connection is working.
 - Ping from the Windows target VM to the Windows server to ensure they can communicate. Note that by default, ping may be disabled on the Windows target VM.
+
+![PingWin](screenshots/PingfromWindows.png).
 
 ## Installing Sysmon and Splunk Forwarder on Windows 10 and Windows Server
 
