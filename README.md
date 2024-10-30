@@ -136,6 +136,14 @@ After updates, exit the root user:
 exit
 ```
 
+![Ubuntu1](screenshots/Ubuntuserverinstall1.png).
+
+![Ubuntu2](screenshots/Ubuntuserverinstall2.png).
+
+![Ubuntu3](screenshots/Ubuntuserverinstall3.png).
+
+![Ubuntu4](screenshots/Ubuntuserverinstall4.png).
+
 ## Creating a NAT Virtual Switch
 
 We'll create a Virtual Switch and configure it with NAT (Network Address Translation) so that our VMs can access the internet. You can either create the virtual switch through Hyper-V Manager and continue the NAT configuration in Powershell or set it up entirely using PowerShell.
