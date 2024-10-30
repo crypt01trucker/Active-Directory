@@ -54,7 +54,7 @@ Before we begin setting up the VMs, download the required ISO files and virtual 
 
 1. Open **Hyper-V Manager** from the Start menu.
 2. Click **Action** > **New** > **Virtual Machine**.
-3. Name the VM (e.g., "Windows10-Victim").
+3. Name the VM (e.g., "Victim-PC").
 4. Choose **Generation 2** for the VM generation.
 5. Assign at least 2048 MB (2 GB) of memory.
 6. Leave the network connection as **Not Connected** for the initial setup.
@@ -104,6 +104,8 @@ Before we begin setting up the VMs, download the required ISO files and virtual 
 ```bash
 sudo apt-get update && apt-get upgrade -y
 ```
+
+![KaliVM](screenshots/HypervinstallkaliVHD.png).
 
 #### Ubuntu Server VM (Splunk Lab)
 
