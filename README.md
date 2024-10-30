@@ -44,6 +44,9 @@ Before we begin setting up the VMs, download the required ISO files and virtual 
 4. Scroll down and select **Hyper-V**.
 5. Click **OK** and restart your computer if prompted.
 
+![appwiz.cpl](EnableHyperv1.png).
+![WindowsFeatures](EnableHyperv2.png).
+
 ### 3. Create Virtual Machines in Hyper-V
 
 #### Windows 10 Victim VM
