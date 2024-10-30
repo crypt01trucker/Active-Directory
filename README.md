@@ -44,7 +44,8 @@ Before we begin setting up the VMs, download the required ISO files and virtual 
 4. Scroll down and select **Hyper-V**.
 5. Click **OK** and restart your computer if prompted.
 
-![appwiz.cpl](scrennshots/EnableHyperv1.png).
+![appwiz.cpl](screenshots/EnableHyperv1.png).
+
 ![WindowsFeatures](screenshots/EnableHyperv2.png).
 
 ### 3. Create Virtual Machines in Hyper-V
