@@ -250,7 +250,7 @@ network:
 
 > **Tip**: Be careful with indentation. This YAML file require tabs, not spaces, for indentation.
 
-![SplunkOG](screenshots/Splunk-OG.png).
+![SplunkOG](screenshots/Splunk-OG-IP.png).
 
 ![SplunkStatic](screenshots/Splunk-Static-IP.png).
 
