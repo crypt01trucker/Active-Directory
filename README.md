@@ -32,7 +32,7 @@ Before we begin setting up the VMs, download the required ISO files and virtual 
 - [Kali Linux](https://www.kali.org/get-kali/#kali-virtual-machines)
 - [Ubuntu Server (optional for later setups)](https://ubuntu.com/download/server)
 
-![WindowsISO](screenshot/Windows10ISO.pgn).
+![WindowsISO](screenshots/Windows10ISO.pgn).
 
 ### 2. Installing Hyper-V
 
