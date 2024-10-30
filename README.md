@@ -330,7 +330,7 @@ These commands will show you the user and group associated with the Splunk files
 - After setting the static IPs, open a command prompt and ping a website (e.g., `ping google.com`) to check if the internet connection is working.
 - Ping from the Windows target VM to the Windows server to ensure they can communicate. Note that by default, ping may be disabled on the Windows target VM.
 
-![PingWin](screenshots/PingfromWindows.png).
+![PingWin](screenshots/PingfromWindows10.png).
 
 ## Installing Sysmon and Splunk Forwarder on Windows 10 and Windows Server
 
