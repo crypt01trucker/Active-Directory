@@ -787,9 +787,9 @@ index=endpoints
 
 1. In the search bar at the top of the Splunk interface, enter the following search query:
    ```
-   index="endpoint" user="vblue"
+   index="endpoint" vblue EventCode=4625
    ```
-   - Here, we're filtering for events associated with the compromised user `vblue`.
+   - Here, we're filtering for events associated with the compromised user `vblue`and **4625** (Windows Event ID), which indicates **failed logon attempt**.
 
 2. To focus on recent activity, select the time frame to the **last 15 minutes** on the right side of the search bar.
 
@@ -798,7 +798,7 @@ index=endpoints
 ### Filter by Event Code
 
 1. Scroll down the results a bit until you find the **Event Code** section.
-2. Click on the event code dropdown and select **4625** (Windows Event ID), which indicates **failed logon attempt**.
+2. Click on the EventCode in the **INTERESTING** FIELDS on the left of your screen and select **4625**.
 
 ### Analyzing Failed Logins
 
@@ -814,14 +814,14 @@ index=endpoints
 1. Now, change the Event Code filter to **EventCode=4624**, which represents **successful logon**.
 2. You should see at least one successful login that coincides with the brute-force attempts.
 
-![Splunktele5](screenshots/Splunk-telemetrykali.png).
+![Splunktele5](screenshots/Splunk-telemetrykaliIP.png).
 
 ### Review Details of Successful Logins
 
 1. Click on **Show All 70 Lines** to see the detailed logs associated with the successful login event.
 2. Here we can see that the successful RDP connection originated from our Kali Linux host and its IP address.
 
-![Splunktele4](screenshots/Splunk-telemetry4.png).
+![Splunktele4](screenshots/Splunk-Telemetry4.png).
 
 ## Conclusion
 
