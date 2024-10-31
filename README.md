@@ -793,7 +793,7 @@ index=endpoints
 
 2. To focus on recent activity, select the time frame to the **last 15 minutes** on the right side of the search bar.
 
-![Splunktele1](screenshots/Splunk-Telemetry1.png).
+![Splunktele1](screenshots/Splunk-telemetry3.png).
 
 ### Filter by Event Code
 
@@ -805,9 +805,9 @@ index=endpoints
 - After applying the filter, you should see multiple entries indicating failed logon attempts. 
 - You can identify that these are likely brute-force attempts since the attacker tried **50 passwords at the same exact time**.
 
-![Splunktele2](screenshots/Splunk-Telemetry2.png).
+![Splunktele2](screenshots/Splunk-telemetry2.png).
 
-![Splunktele3](screenshots/Splunk-Telemetry3.png).
+![Splunktele3](screenshots/Splunk-telemetry3.png).
 
 ### Check for Successful RDP Connections
 
