@@ -798,7 +798,7 @@ index=endpoints
 ### Filter by Event Code
 
 1. Scroll down the results a bit until you find the **Event Code** section.
-2. Click on the EventCode in the **INTERESTING** FIELDS on the left of your screen and select **4625**.
+2. Click on the EventCode in the **INTERESTING FIELDS** on the left of your screen and select **4625**.
 
 ### Analyzing Failed Logins
 
