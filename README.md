@@ -793,7 +793,7 @@ index=endpoints
 
 2. To focus on recent activity, select the time frame to the **last 15 minutes** on the right side of the search bar.
 
-![Splunktele1](screenshots/Splunk-telemetry3.png).
+![Splunktele1](screenshots/Splunk-telemetry1.png).
 
 ### Filter by Event Code
 
