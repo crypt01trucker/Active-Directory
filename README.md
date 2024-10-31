@@ -814,10 +814,14 @@ index=endpoints
 1. Now, change the Event Code filter to **EventCode=4624**, which represents **successful logon**.
 2. You should see at least one successful login that coincides with the brute-force attempts.
 
+![Splunktele5](screenshots/Splunk-telemetrykali.png).
+
 ### Review Details of Successful Logins
 
 1. Click on **Show All 70 Lines** to see the detailed logs associated with the successful login event.
 2. Here we can see that the successful RDP connection originated from our Kali Linux host and its IP address.
+
+![Splunktele4](screenshots/Splunk-telemetry4.png).
 
 ## Conclusion
 
