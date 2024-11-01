@@ -6,6 +6,10 @@ This guide aims to create an on-premises environment consisting of an Active Dir
 
 > **Important Security Disclaimer**: This lab environment is for educational purposes only. The techniques demonstrated should only be used in authorized test environments. Never attempt these techniques against systems without explicit permission.
 
+## Network Topology
+
+![(Topology)](NetworkTopology.png).
+
 ## Tools and Resources Required
 
 - **Hyper-V** (or VMware/VirtualBox)
