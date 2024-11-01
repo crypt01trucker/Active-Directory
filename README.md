@@ -214,7 +214,7 @@ New-NetNat -Name "NATNetwork" -InternalIPInterfaceAddressPrefix 192.168.200.0/24
 
 ### Configure Ubuntu Server Static IP
 
-To configure a static IP address on Ubuntu server we need to configure the yaml file that is stored in the '/etc/nelplan' directory. First let's navigate to that directory.
+To configure a static IP address on Ubuntu server we need to configure the yaml file that is stored in the '/etc/netplan' directory. First let's navigate to that directory.
 ```bash
 cd /etc/netplan
 ```
@@ -265,7 +265,7 @@ network:
 
 2. Install Splunk:
    ```bash
-   sudo dpkg - I splunk-9.3.1-0b8d769cb912-linux-2.6-amd64.deb
+   sudo dpkg -i splunk-9.3.1-0b8d769cb912-linux-2.6-amd64.deb
    ```
 
 ![splunkpackage](screenshots/Splunk-Install.png).
@@ -310,7 +310,7 @@ These commands will show you the user and group associated with the Splunk files
   - **Subnet mask**: `255.255.255.0` (/24)
   - **Default gateway**: The gateway IP set when you created the virtual switch, e.g., `192.168.200.1`
 - Set DNS server addresses:
-  - **Preferred DNS server**: `192.168.200.100` (Windows Server IP, for domain joining)
+  - **Preferred DNS server**: `192.168.200.100` (This is the Windows Server IP, for domain joining)
   - **Alternate DNS server**: `8.8.8.8` (Google DNS)
 - Click **OK** to save the settings.
 
@@ -378,7 +378,7 @@ These commands will show you the user and group associated with the Splunk files
 
 3. **Extract and Install Sysmon**:
    - Extract the Sysmon zip file first.
-   - Run PowerShell as an administrator and change to the download directory:
+   - Run PowerShell as an administrator and change to the actual download directory path:
      ```powershell
      cd path\to\download\directory
      ```
