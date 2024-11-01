@@ -8,7 +8,7 @@ This guide aims to create an on-premises environment consisting of an Active Dir
 
 ## Network Topology
 
-![(Topology)](NetworkTopology.png).
+![(Topology)](screenshots/NetworkTopology.png).
 
 ## Tools and Resources Required
 
