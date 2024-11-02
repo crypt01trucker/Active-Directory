@@ -19,7 +19,7 @@ This guide aims to create an on-premises environment consisting of an Active Dir
 - **Windows Server 2022** (Active Directory)
 - **Password Manager** (Keepass, Bitwarden or similar to securely store credentials for multiple accounts)
 
-#### Minimum VM Specifications:
+#### Minimum VM Requirements:
 - Windows Server 2022: 4GB RAM, 50GB storage
 - Windows 10: 2GB RAM, 50GB storage
 - Kali Linux: 2GB RAM, 20GB storage
