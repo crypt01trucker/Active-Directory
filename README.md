@@ -159,9 +159,9 @@ For this guide, I will be using the **PowerShell method**.
 Run the following command in **PowerShell (Admin mode)** to create the virtual network and assign it a name:
 
 ```powershell
-New-NetNat -Name "NATNetwork" -InternalIPInterfaceAddressPrefix 192.168.200.0/24
+New-VMSwitch -SwitchName "NATSwitch" -SwitchType Internal
 ```
-This command creates a NAT virtual switch with the name `NATNetwork` and uses the IP range `192.168.200.0/24`.
+This command creates a virtual switch with the name `NATSwitch`.
 
 ### Find the Network Interface Index
 
